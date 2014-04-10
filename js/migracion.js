@@ -1,5 +1,5 @@
-var width = 700,
-    height = 700,
+var width = 750,
+    height = 750,
     outerRadius = Math.min(width, height) / 2 - 10,
     innerRadius = outerRadius - 24;
 
