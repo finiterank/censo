@@ -1,0 +1,23 @@
+Censo
+========================================================
+
+```{r}
+library(plyr)
+```
+
+```{r}
+censo <- read.table("datos//censo.csv", header=T, sep=";")
+```
+
+```{r}
+departamentos <- censo[,c(1,2)]
+departamentos <- ddply(departamentos, ~Cod,  summarise, nombre=Dep[1])
+migracion <- censo[,c(1, 36:69)]
+migracion[is.na(migracion)] <- 0
+matrizmigr <- ddply(migracion, .(Cod), numcolwise(sum))
+matrizmigr <- matrizmigr[,-1]
+matrizmigr <- matrizmigr[, c(1:32, 34, 33)]
+matrizmigrdep <- matrizmigr[,-34] 
+for(i in 1:33){matrizmigrdep[i,i]<- 0}
+matrizmigrdep <- matrizmigrdep/sum(matrizmigrdep)
+```
