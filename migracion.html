@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<title>Migración en Colombia - Censo 2005</title>
+<style>
+@import url(http://fonts.googleapis.com/css?family=Andada);
+
+
+body{font-size:1em;
+font-family: 'Andada', serif; color:#444;}
+
+
+svg{margin:0 auto;
+ display: block;}
+
+.explicacion{width:900px;
+margin:0 auto;}
+
+.explicacion h1{font-size:4em;}
+
+.explicacion p{font-size: 2em; line-height: 1.5em;}
+
+.explicacion a{color: #ff6600;}
+
+#circle circle {
+  fill: none;
+  pointer-events: all;
+}
+
+.group path {
+  fill-opacity: .4;
+}
+
+path.chord {
+  stroke: #000;
+  stroke-width: .1px;
+}
+
+#circle:hover path.fade {
+  display: none;
+}
+
+</style>
+</head>
+<body>
+
+<div class="explicacion"><h1>Yo no soy de por aquí</h1></div>
+<div id="diagrama"></div>
+<div class="explicacion">
+<p>Colombianos que nacieron en un departamento distinto a aquel donde viven de acuerdo al <a href="http://www.dane.gov.co/index.php/es/poblacion-y-registros-vitales/censos/censo-2005/123-demograficas/censos/2694-sistema-de-consulta">censo de población de 2005</a>. Las bandas entre departamentos representan el flujo de población. Entre más alto el flujo, más gruesa la banda.  El arco que representa a cada departamento es proporcional al número de <em>exdepartamentados</em> que viven ahí. Si pone el puntero sobre un departamento verá sólo las bandas que lo involucran. Las bandas son asimétricas: la relación entre el ancho en cada "costa" de la banda y el largo total del departamento es igual a la proporción de habitantes provenientes del otro lado que viven ahí. El color indica desde dónde se mueven más (así, un departamento como Boyacá, donde la mayoría de las bandas son verdes, exporta más de lo que importa — lo opuesto pasa en Bogotá, donde los colores de las bandas son mayoritariamente los del otro lado). Ponga el puntero sobre las bandas para obtener los porcentajes de flujo en cada dirección. Todos los porcentajes ofrecidos son calculados sobre el total de censados que nacieron fuera del departamento donde viven y especificaron su proveniencia (8.158.694 habitantes).</p><p>Diagrama construído con <a href="http://d3js.org/">D3.js</a>. Código basado en <a href="http://bost.ocks.org/mike/uberdata/">este ejemplo de Mike Bostock</a>.</p></div>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="http://d3js.org/queue.v1.min.js"></script>
+<script type="text/javascript" src="js/migracion.js"></script>
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-48011916-1', 'finiterank.github.io');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>
