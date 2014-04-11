@@ -103,8 +103,8 @@ function ready(error, colombia) {
                                 var mun= d.properties.name;
                                 var dpt= d.properties.dpt;
                                 var dep = h.dep;
-                                var ind = h["ind"].toFixed(2);
-                                var inddepart = indDep.get(dep).toFixed(2);
+                                var ind = h["ind"].toFixed(0);
+                                var inddepart = indDep.get(dep).toFixed(0);
                                 var output = "<h4>"+ mun + ", " + dpt + "</h4>"
                                 output += "<p class='indice-mun'>"+ ind +"</p>";
                                 output += "<p class='indice-dep'>Índice departamental: "+ inddepart + "</p>";
