@@ -57,7 +57,7 @@ function ready(error, matriz, departamentos){
         .on("mouseover", mouseover);
 
     group.append("title").text(function(d, i) {
-      return "Residentes en " + departamentos[i].nombre + ": " + formatPercent(d.value);
+      return "Exdepartamentados residentes en " + departamentos[i].nombre + ": " + formatPercent(d.value);
     });
 
     var groupPath = group.append("path")
