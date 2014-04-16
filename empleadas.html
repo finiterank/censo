@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<style>
+a:hover{color:#FFA365;}
+a{color:#ff6600;}
+
+path {
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.land {
+  fill: #f1f1f1;
+}
+
+.border {
+  fill: none;
+  stroke: #fff;
+}
+
+.graph {
+  fill: none;
+  stroke: none;
+}
+
+#infotabla{padding-top:0px;}
+
+table{font-size:0.8em;}
+
+td.numero, th.numero {
+text-align: right;
+}
+
+</style>
+<body>
+
+<div class="container">
+
+<div class="row">
+<div class="col-md-12">
+<h1>Como de la familia<br><small>"Empleados de servicio" internos por cada 100.000 habitantes</small></h1>
+<small>
+<p>La servidumbre interna <a href="http://www.eltiempo.com/opinion/columnistas/jorgeorlandomelo/servidumbre-femenina-jorge-orlando-melo-columnista-el-tiempo_12714605-4">es una forma velada de opresión y explotación</a> ampliamente tolerada. <a href="http://www.dane.gov.co/index.php/es/poblacion-y-registros-vitales/censos/censo-2005/123-demograficas/censos/2694-sistema-de-consulta">El censo de 2005</a> incluye una categoría especial para registrarlos (en la parte donde se explica cuál es la relación de esas otras personas que viven en la casa con el entrevistado) y reporta 164.765 personas en esta situación. <a href="http://radioambulante.org/en/audio-en/nohemi-en">La historia de la señora "Nohemí"</a> no es una singularidad. Se repite con frecuencia e impunidad. (Novela relevante: <a href="http://www.alfaguara.com/co/libro/sin-titulo-1977/"><em>Sin Título, 1977</em></a>, de Margarita Posada.)</p>
+
+<p>En este mapa tomo los departamentos colombianos y calculo para cada uno el cociente entre el número de "empleados de servicio" reportados en el censo (es decir, que viven (y por ende son censados) en la casa donde <em>trabajan</em>) y el total de la población. Me restrinjo a los números reportados en cascos urbanos municipales. Este número lo multiplico por 100.000. El área de las bolas es proporcional al índice. Este se puede leer como el número de "empleados de servicio" internos por cada 100.000 habitantes. Los departamentos <span style="color: #ff0000;"><strong>rojos</strong></span> tienen un índice mayor que el nacional; los <span style="color: #009900;"><strong>verdes</strong></span> tienen un índice menor. En la tabla contigua puede ver los municipios con más de 10.000 habitantes en el casco urbano (hay 295 en el país) que tienen el índice más alto. Si pasa el puntero por las bolas que representan cada departamento puede ver la tabla correspondiente al departamento seleccionado.</p></small>
+</div>
+</div>
+
+<div class="row">
+
+<div class="col-md-8">
+<div id="mapa"></div>
+</div>
+
+<div class="col-md-4">
+<div id="infotabla"></div>
+</div>
+
+</div>
+</div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="http://d3js.org/queue.v1.min.js"></script>
+<script type="text/javascript" src="http://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+var width = 600,
+    height = 700;
+
+var datosMunicipioId = d3.map(),
+    indDep = d3.map(),
+    datosDepartamentoId = d3.map();
+
+var projection = d3.geo.mercator()
+    .scale(2000)
+    .translate([width / 2, height / 2])
+    .rotate([60,-42,5]);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var svg = d3.select("#mapa").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var tabla = d3.select("#infotabla").append("div")
+    .attr("class", "tabla")
+    .style("opacity", 1);
+
+queue()
+    .defer(d3.json, "depto/mapa-departamentos.json")
+    .defer(d3.csv, "datos/serviciodomestico.csv", fillDatosMunicipios)
+    .await(ready);
+
+
+function ready(error, colombia) {
+  if (error) return console.error(error);
+
+  var dat = datosMunicipioId.values(),
+      poblaciontotal = dat.map(function(d){return d.pob;}).reduce(suma),
+      empleadostotal = dat.map(function(d){return d.emplserv;}).reduce(suma),
+      indicetotal = 100000 * empleadostotal / poblaciontotal;
+
+
+  console.log(dat);
+
+  generarTablaInicial(dat, poblaciontotal, indicetotal);
+
+  var datdpt = d3.nest()
+    .key(function(d) { return d.dep; })
+    .entries(dat);
+
+  datdpt.forEach(function(dep){
+    dep.nombre = dep.values[0].depnombre;
+    dep.pob = dep.values.map(function(d){return d.pob;}).reduce(suma);
+    dep.empl = dep.values.map(function(d){return d.emplserv;}).reduce(suma);
+    dep.ind = 100000 * dep.empl / dep.pob;
+    indDep.set(dep.key, dep.ind);
+    datosDepartamentoId.set(dep.key, dep);
+  });
+
+  var indicesdepartamentos =  indDep.values();
+
+  var radios = indicesdepartamentos.map(function(d){
+     return Math.sqrt(d/Math.PI);
+  });
+
+  var medianaindices = numericmedian(indicesdepartamentos);
+
+  var geometryCollection = colombia.objects.depto,
+      featureCollection = topojson.feature(colombia, geometryCollection),
+      features = featureCollection.features,
+      neighbors = topojson.neighbors(geometryCollection.geometries);
+
+  features.forEach(function(feature, i) {
+    feature.centroid = path.centroid(feature);
+    if (feature.centroid.some(isNaN)) feature.centroid = null; // off the map
+    feature.neighbors = feature.centroid ? neighbors[i]
+        .filter(function(j) { return j < i && features[j].centroid; })
+        .map(function(j) { return features[j]; }) : [];
+  });
+
+  svg.append("path")
+      .attr("class", "land")
+      .datum(featureCollection)
+      .attr("d", path);
+
+  svg.append("path")
+      .attr("class", "border")
+      .datum(topojson.mesh(colombia, geometryCollection, function(a, b) { return a !== b; }))
+      .attr("d", path);
+
+  svg.append("path")
+      .attr("class", "graph")
+      .datum(d3.merge(features.map(function(a) { return a.neighbors.map(function(b) { return [a, b]; }); })))
+      .attr("d", function(d) { return d.map(function(l) { return "M" + l[0].centroid + "L" + l[1].centroid; }).join(""); });
+
+
+  var circles = svg.selectAll("circle")
+        .data(features)
+        .enter()
+        .append("circle")
+        .attr("r", function(d){
+            var inddepart = indDep.get(d.id);
+            return Math.sqrt(inddepart/Math.PI);
+        })
+        .attr("cx", function(d){return d.centroid[0];})
+        .attr("cy", function(d){return d.centroid[1];})
+        .style("fill", function(d){
+            var inddepart = indDep.get(d.id).toFixed(0);
+            if(inddepart > indicetotal){ return "#ff0000";}
+            else{ return "#009900";}
+        })
+        .on("mouseover", function(d){
+            tabla.transition()
+                 .duration(1000)
+                 .style("opacity", 0);
+            var datosdep = datosDepartamentoId.get(d.id);
+            var nombre = datosdep.nombre;
+            var poblacion = datosdep.pob;
+            var indice = datosdep.ind;
+            var top = topMunDep(d.id).slice(0, 20);
+            var o = "<center><h4>" + nombre;
+            o += "<br><small>" + indice.toFixed(0) + " empl. internas x 100k habs." + "<br>";
+            o += "(" + numberWithPeriods(poblacion)  + " habitantes)" +  "</small></h4></center>";
+            if(top.length >0){
+                // o += "<small>Municipios (hasta un máximo de veinte) con más de 10.000 habitantes en el casco urbano:</small>"
+                o += "<table class='table table-condensed'>";
+                o += "<thead>";
+                o += "<tr><th>Municipio</th><th class='numero'>Población</th><th class='numero'>Índice</th></tr>";
+                o += "</thead>";
+                o += "<tbody>";
+                top.forEach(function(mun){
+                    o += "<tr>";
+                    o += "<td>" + mun.mpionombre + "</td>";
+                    o += "<td class='numero'>" + numberWithPeriods(mun.pob) + "</td>";
+                    o += "<td class='numero " + claseCeldaIndice(mun['ind'], indicetotal) + "'>" + numberWithPeriods(mun['ind'].toFixed(0)) + "</td>";
+                    o += "</tr>";
+                    });
+                o += "</tbody>";
+                o += "</table>";
+                }
+            tabla.html(o);
+            tabla.transition()
+                 .duration(1000)
+                 .style("opacity", 1);
+        })
+        .on("mouseout", function(d){
+            tabla.transition()
+                .duration(1000)
+                .style("opacity", 0);
+            generarTablaInicial(dat, poblaciontotal, indicetotal);
+            tabla.transition()
+                 .duration(1000)
+                 .style("opacity", 1);
+        });
+}
+
+function fillDatosMunicipios(d){
+    d.dep = +d.dep;
+    d.mpio = +d.mpio;
+    d.pob = +d.pob;
+    d.emplserv = +d.emplserv;
+    d.ind = +d.ind;
+    datosMunicipioId.set(d.mpio, d);
+}
+
+function claseCeldaIndice(ind, tot){
+    if(ind>tot){return "danger";}
+    else{return "success";}
+}
+
+function generarTablaInicial(dat, pob, ind){
+    var municipiosfiltrados = dat.filter(function(d){
+        return d.pob >= 10000;
+        })
+        .sort(function(a,b){return b.ind - a.ind;})
+        .slice(0,20);
+    console.log(municipiosfiltrados);
+    var o = "<center><h4>Colombia";
+    o += "<br><small>" + ind.toFixed(0) + " empl. internas x 100k habs." + "<br>";
+    o += "(" + numberWithPeriods(pob)  + " habitantes)" +  "</small></h4></center>";
+    //o += "<small>Los veinte municipios con más de 10.000 habitantes en el casco urbano y mayor índice de empleadas internas por 100.000 habitantes:</small>"
+    o += "<table class='table table-condensed'>";
+    o += "<thead>";
+    o += "<tr><th>Municipio</th><th>Departamento</th><th class='numero'>Población</th><th class='numero'>Índice</th></tr>";
+    o += "</thead>";
+    o += "<tbody>";
+    municipiosfiltrados.forEach(function(mun){
+        o += "<tr>";
+        o += "<td>" + mun.mpionombre + "</td>";
+        o += "<td>" + mun.depnombre + "</td>";
+        o += "<td class='numero'>" + numberWithPeriods(mun.pob) + "</td>";
+        o += "<td class='numero " + claseCeldaIndice(mun['ind'], ind) + "'>" + mun['ind'].toFixed(0) + "</td>";
+        o += "</tr>";
+    });
+    o += "</tbody>";
+    o += "</table>";
+    tabla.html(o);
+}
+
+function suma(a,b){return a+b;}
+
+
+function numericmedian(a){
+    var sortedarray = a.sort(function(a,b){return a-b});
+    var lengtharray = a.length;
+    var midpoint = Math.floor(lengtharray / 2);
+    return sortedarray[midpoint];
+}
+
+function topMunDep(depid){
+    var datosdep = datosDepartamentoId.get(depid);
+    var municipios = datosdep.values.filter(function(d){
+        return d.pob >= 10000;
+    });
+    return municipios.sort(function(a,b){return b.ind - a.ind;})
+}
+
+function numberWithPeriods(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+d3.select(self.frameElement).style("height", height + "px");
+
+</script>
