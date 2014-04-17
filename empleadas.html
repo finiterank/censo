@@ -262,7 +262,7 @@ function generarTablaInicial(dat, pob, ind){
         o += "<td>" + mun.mpionombre + "</td>";
         o += "<td>" + mun.depnombre + "</td>";
         o += "<td class='numero'>" + numberWithPeriods(mun.pob) + "</td>";
-        o += "<td class='numero " + claseCeldaIndice(mun['ind'], ind) + "'>" + mun['ind'].toFixed(0) + "</td>";
+        o += "<td class='numero " + claseCeldaIndice(mun['ind'], ind) + "'>" + numberWithPeriods(mun['ind'].toFixed(0))+ "</td>";
         o += "</tr>";
     });
     o += "</tbody>";
