@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Desplazamiento forzado (2000-2007)</title>
+<style>
+@import url(http://fonts.googleapis.com/css?family=Andada);
+
+
+body{font-size:.55em;
+font-family: 'Andada', serif; color:#444;}
+
+
+svg{margin:0 auto;
+ display: block;}
+
+.explicacion{width:750px;
+margin:0 auto;}
+
+.explicacion h1{font-size:3em;}
+
+.explicacion p{font-size: 1.5em; line-height: 1.5em;}
+
+.explicacion a{color: #ff6600;}
+
+#circle circle {
+  fill: none;
+  pointer-events: all;
+}
+
+.group path {
+  fill-opacity: .4;
+}
+
+path.chord {
+  stroke: #000;
+  stroke-width: .1px;
+}
+
+#circle:hover path.fade {
+  display: none;
+}
+
+</style>
+</head>
+<body>
+
+<div class="explicacion"><h1>Desplazamiento forzado (2000-2007)</h1></div>
+<div id="diagrama"></div>
+<div class="explicacion">
+<p>Diagrama de flujos de desplazamiento forzado entre departamentos basado en datos que <a href="http://rri.wvu.edu/people/faculty-staff/juan-tomas-sayago/">Juan Tomás Sayago</a> extrajo del Registro Único de Población Desplazada para <a href="http://www.bdigital.unal.edu.co/5901/1/tesis_sayago_Agosto_21.pdf">su tesis de maestría</a> (lectura recomendada). La banda que representa cada departamento es proporcional al número de desplazados provenientes de ese departamento con respecto al total nacional. Las cuerdas entre los departamentos representan el nivel de desplazamiento en cada dirección. Marque con el puntero sobre los departamentos y flujos para más información. <a href="http://www.finiterank.com/notas/2014/04/27/27-3/">Aquí</a> otros cálculos sobre desplazamiento forzado desde 1984 hasta 2012 basados en datos (no tan detallados como estos) del observatorio de derechos humanos de la presidencia colombiana.</p><p>Esto es parte de <a href="http://finiterank.com/observatorios">los observatorios de Rango Finito</a>.</p></div>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="http://d3js.org/queue.v1.min.js"></script>
+<script type="text/javascript" src="js/desplazados.js"></script>
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-48011916-1', 'finiterank.github.io');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>
