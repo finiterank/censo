@@ -129,12 +129,18 @@ function updateChords(matrix, modo) {
             if (modo === 0){
                 return numberWithCommas(d.value)
                     + " desplazados dejaron su casa en "
-                    + departamentos[i];
+                    + departamentos[i]
+                    + "\n"
+                    + "(" + formatPercent(100 * d.value /  2209942)
+                    + " del total nacional)";
             }
             else {
                 return numberWithCommas(d.value)
                     + " desplazados se asentaron en "
-                    + departamentos[i];
+                    + departamentos[i]
+                    + "\n"
+                    + "(" + formatPercent(100 * d.value /  2209942)
+                    + " del total nacional)";
             }
         });
 
@@ -255,7 +261,7 @@ function updateChords(matrix, modo) {
     //update the path shape
     chordPaths.transition()
         .duration(1500)
-        //.attr("opacity", 0.5) //optional, just to observe the transition
+        .attr("opacity", 0.5) //optional, just to observe the transition
         .style("fill", function (d) {
             if (modo === 0){
                 return color(departamentos[d.source.index]);
