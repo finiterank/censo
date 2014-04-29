@@ -49,8 +49,17 @@ path.chord {
 
 <div class="explicacion"><h1>El riesgo es que se quieran quedar<br><small>Desplazamiento forzado (2000-2006)</small></h1></div>
 <div id="diagrama"></div>
+<center>
+<button id="DesdeButton" disabled="true">De dónde vienen</button>
+<button id="HastaButton">Dónde están</button>
+</center>
 <div class="explicacion">
-<p>Diagrama de flujos de desplazamiento forzado entre departamentos basado en datos que <a href="http://rri.wvu.edu/people/faculty-staff/juan-tomas-sayago/">Juan Tomás Sayago</a> extrajo del Registro Único de Población Desplazada para <a href="http://www.bdigital.unal.edu.co/5901/1/tesis_sayago_Agosto_21.pdf">su tesis de maestría</a> (lectura recomendada). La banda que representa cada departamento es proporcional al número de desplazados provenientes de ese departamento con respecto al total nacional. Las cuerdas entre los departamentos representan el nivel de desplazamiento en cada dirección. Marque con el puntero los departamentos y flujos para más información. <a href="http://www.finiterank.com/notas/2014/04/27/27-3/">Aquí</a> otros cálculos sobre desplazamiento forzado desde 1984 hasta 2012 basados en datos (no tan detallados como estos) del observatorio de derechos humanos de la presidencia colombiana.</p><p>Esto es parte de <a href="http://finiterank.com/observatorios">los observatorios de Rango Finito</a>.</p></div>
+<p>Diagrama de flujos de desplazamiento forzado entre departamentos basado en datos que <a href="http://rri.wvu.edu/people/faculty-staff/juan-tomas-sayago/">Juan Tomás Sayago</a> extrajo del Registro Único de Población Desplazada para <a href="http://www.bdigital.unal.edu.co/5901/1/tesis_sayago_Agosto_21.pdf">su tesis de maestría</a> (lectura recomendada).</p>
+
+<p>Inicialmente, la banda que representa cada departamento es proporcional al número de desplazados <strong>provenientes</strong> de ese departamento con respecto al total nacional. Si oprime el botón <em>Dónde están</em> la banda se vuelve proporcional al número de desplazados <strong>asentados</strong> en cada departamento. Las cuerdas entre los departamentos representan el nivel de desplazamiento en cada dirección. Marque con el puntero los departamentos y flujos para más información.</p> <p><a href="http://www.finiterank.com/notas/2014/04/27/27-3/">Aquí</a> otros cálculos sobre desplazamiento forzado desde 1984 hasta 2012 basados en datos (no tan detallados como estos) del observatorio de derechos humanos de la presidencia colombiana.</p>
+<p>La transición entre los diagramas gracias a <a href="http://stackoverflow.com/questions/21813723/change-and-transition-dataset-in-chord-diagram-with-d3">esta respuesta detalladísima en <em>Stack Overflow</em></a>.</p>
+
+<p>Esto es parte de <a href="http://finiterank.com/observatorios">los observatorios de Rango Finito</a>.</p></div>
 <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
 <script type="text/javascript" src="http://d3js.org/queue.v1.min.js"></script>
 <script type="text/javascript" src="js/desplazados.js"></script>
