@@ -132,8 +132,8 @@ function updateChords(matrix, modo) {
                     + " desplazados dejaron su casa en "
                     + departamentos[i]
                     + "\n"
-                    + "(" + (d.value /  2209942)
-                    + " del total nacional)";
+                    + "(" + (100 * d.value /  2209942).toFixed(2)
+                    + "% del total nacional)";
             }
             else {
                 console.log(d.value, 100 * d.value/2209942);
@@ -141,8 +141,8 @@ function updateChords(matrix, modo) {
                     + " desplazados se asentaron en "
                     + departamentos[i]
                     + "\n"
-                    + "(" + (d.value /  2209942)
-                    + " del total nacional)";
+                    + "(" + (100 * d.value /  2209942).toFixed(2)
+                    + "% del total nacional)";
             }
         });
 
