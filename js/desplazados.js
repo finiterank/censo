@@ -127,19 +127,21 @@ function updateChords(matrix, modo) {
     groupG.select("title")
         .text(function(d, i) {
             if (modo === 0){
+                console.log(d.value, 100 * d.value/2209942);
                 return numberWithCommas(d.value)
                     + " desplazados dejaron su casa en "
                     + departamentos[i]
                     + "\n"
-                    + "(" + formatPercent(100 * d.value /  2209942)
+                    + "(" + (d.value /  2209942)
                     + " del total nacional)";
             }
             else {
+                console.log(d.value, 100 * d.value/2209942);
                 return numberWithCommas(d.value)
                     + " desplazados se asentaron en "
                     + departamentos[i]
                     + "\n"
-                    + "(" + formatPercent(100 * d.value /  2209942)
+                    + "(" + (d.value /  2209942)
                     + " del total nacional)";
             }
         });
