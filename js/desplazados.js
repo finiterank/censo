@@ -263,7 +263,7 @@ function updateChords(matrix, modo) {
     //update the path shape
     chordPaths.transition()
         .duration(1500)
-        .attr("opacity", 0.5) //optional, just to observe the transition
+        //.attr("opacity", 0.5) //optional, just to observe the transition
         .style("fill", function (d) {
             if (modo === 0){
                 return color(departamentos[d.source.index]);
