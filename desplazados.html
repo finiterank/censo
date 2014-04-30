@@ -23,15 +23,21 @@ margin:0 auto;}
 
 .explicacion a{color: #ff6600;}
 
-#circle circle {
-  fill: none;
-  pointer-events: all;
-}
-
 small {color:#999;}
 
 .group path {
   fill-opacity: .6;
+}
+
+
+#circle circle {
+    fill: none;
+    pointer-events: all;
+}
+path.chord {
+    stroke: #000;
+    stroke-width: .10px;
+    transition: opacity 0.3s;
 }
 
 path.chord {
