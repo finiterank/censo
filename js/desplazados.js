@@ -288,14 +288,14 @@ function updateChords(matrix, modo) {
     });
     //the "unfade" is handled with CSS :hover class on g#circle
     //you could also do it using a mouseout event:
-
+/*
     g.on("mouseout", function() {
         if (this == g.node() )
             //only respond to mouseout of the entire circle
             //not mouseout events for sub-components
             chordPaths.classed("fade", false);
     });
-
+*/
 
     last_layout = layout; //save for next update
 
