@@ -273,7 +273,7 @@ function updateChords(matrix, modo) {
             }
         })
         .attrTween("d", chordTween(last_layout))
-        .transition().duration(100).attr("opacity", 1) //reset opacity
+        .transition().duration(1000).attr("opacity", 1) //reset opacity
     ;
 
     //add the mouseover/fade out behaviour to the groups
