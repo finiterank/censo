@@ -113,8 +113,6 @@ function ready(error, colombia) {
       indicetotal = 100000 * empleadostotal / poblaciontotal;
 
 
-  console.log(dat);
-
   generarTablaInicial(dat, poblaciontotal, indicetotal);
 
   var datdpt = d3.nest()
@@ -195,16 +193,16 @@ function ready(error, colombia) {
             o += "<br><small>" + indice.toFixed(0) + " empl. internas x 100k habs." + "<br>";
             o += "(" + numberWithPeriods(poblacion)  + " habitantes urbanos)" +  "</small></h4></center>";
             if(top.length >0){
-                // o += "<small>Municipios (hasta un máximo de veinte) con más de 10.000 habitantes en el casco urbano:</small>"
                 o += "<table class='table table-condensed'>";
                 o += "<thead>";
-                o += "<tr><th>Municipio</th><th class='numero'>Población</th><th class='numero'>Índice</th></tr>";
+                o += "<tr><th>Municipio</th><th class='numero'>Población</th><th class='numero'>Empleadas internas</th><th class='numero'>Índice</th></tr>";
                 o += "</thead>";
                 o += "<tbody>";
                 top.forEach(function(mun){
                     o += "<tr>";
                     o += "<td>" + mun.mpionombre + "</td>";
                     o += "<td class='numero'>" + numberWithPeriods(mun.pob) + "</td>";
+                    o += "<td class='numero'>" + numberWithPeriods((mun.pob * mun['ind'] / 100000).toFixed(0)) + "</td>";
                     o += "<td class='numero " + claseCeldaIndice(mun['ind'], indicetotal) + "'>" + numberWithPeriods(mun['ind'].toFixed(0)) + "</td>";
                     o += "</tr>";
                     });
@@ -247,14 +245,12 @@ function generarTablaInicial(dat, pob, ind){
         })
         .sort(function(a,b){return b.ind - a.ind;})
         .slice(0,20);
-    console.log(municipiosfiltrados);
     var o = "<center><h4>Colombia";
     o += "<br><small>" + ind.toFixed(0) + " empl. internas x 100k habs." + "<br>";
     o += "(" + numberWithPeriods(pob)  + " habitantes urbanos)" +  "</small></h4></center>";
-    //o += "<small>Los veinte municipios con más de 10.000 habitantes en el casco urbano y mayor índice de empleadas internas por 100.000 habitantes:</small>"
     o += "<table class='table table-condensed'>";
     o += "<thead>";
-    o += "<tr><th>Municipio</th><th>Departamento</th><th class='numero'>Población</th><th class='numero'>Índice</th></tr>";
+    o += "<tr><th>Municipio</th><th>Departamento</th><th class='numero'>Población</th><th class='numero'>Empleadas internas</th><th class='numero'>Índice</th></tr>";
     o += "</thead>";
     o += "<tbody>";
     municipiosfiltrados.forEach(function(mun){
@@ -262,6 +258,7 @@ function generarTablaInicial(dat, pob, ind){
         o += "<td>" + mun.mpionombre + "</td>";
         o += "<td>" + mun.depnombre + "</td>";
         o += "<td class='numero'>" + numberWithPeriods(mun.pob) + "</td>";
+        o += "<td class='numero'>" + numberWithPeriods((mun.pob * mun['ind'] / 100000).toFixed(0)) + "</td>";
         o += "<td class='numero " + claseCeldaIndice(mun['ind'], ind) + "'>" + numberWithPeriods(mun['ind'].toFixed(0))+ "</td>";
         o += "</tr>";
     });
